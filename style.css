@@ -3,11 +3,14 @@
     margin: 10vh auto;
 }
 
+
+
 #num-Operator-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: 20em;
     height: 20em;
+    border: 0.5px solid black;
 }
 
 #zero {
