@@ -1,0 +1,16 @@
+#main-Calc-Wrapper {
+    width: 20em;
+    margin: 10vh auto;
+}
+
+#num-Operator-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 20em;
+    height: 20em;
+}
+
+#zero {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
