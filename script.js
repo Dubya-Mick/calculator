@@ -44,15 +44,62 @@ for(let i = 0; i < allButtons.length; i++) {
     allButtons[i].style.border = "0.5px solid black";
 }
 
+
+//initiate all variables needed by the calculator
+let chosenOperator = '';
+let firstOperand = '';
+let chosenNumber = '';
+
+
+//grab the operators and assign them values equivalent to their operation
+//add functionality to operator: when clicked, saves the chosenNumber value
+let allTheOperators = document.getElementsByClassName('operator');
+for(let i = 0; i < allTheOperators.length; i++) {
+    let operatorClicked = allTheOperators[i];
+    operatorClicked.addEventListener('click', () => {
+        //if a number is chosen save the number as an
+        //operand, reset chosenNumber, and set the chosenOperator
+        if (chosenNumber != '') {
+            firstOperand = chosenNumber;
+            chosenOperator = operatorClicked.textContent;
+        }
+    });
+}
+
 //grab all numbers and give each one a function that changes the text content of
 //the calculator's display and stores that number value in chosenNumber for calculation
 
-let chosenNumber = 0;
 let allTheNumbers = document.getElementsByClassName('number');
 let resultDisplay = document.querySelector('#result-Display');
 for(let i = 0; i < allTheNumbers.length; i++) {
-    allTheNumbers[i].addEventListener('click', () => {
-        resultDisplay.textContent = allTheNumbers[i].textContent;
-        chosenNumber += parseInt(allTheNumbers[i].textContent);
-    })
+    let numberClicked = allTheNumbers[i];
+    numberClicked.addEventListener('click', () => {
+        if (firstOperand != '' && chosenOperator != '' && firstOperand == chosenNumber) {
+            chosenNumber = '';
+            resultDisplay.textContent = ''; 
+            resultDisplay.textContent = numberClicked.textContent;
+        } else if (resultDisplay.textContent == '0') {
+           resultDisplay.textContent = numberClicked.textContent;
+        } else {
+           resultDisplay.textContent += numberClicked.textContent;
+        }
+        chosenNumber += numberClicked.textContent;
+   });
 }
+
+
+
+let equalsSign = document.querySelector('#equals');
+
+//setting the first operand to the first chosen value of chosenNumber
+//and reseting chosen number
+
+function calculate() {
+    if(firstOperand != '' && chosenOperator != '') {
+        
+    }
+}
+
+//function calculate() {
+//    if (chosenNumber != '' )
+//}
