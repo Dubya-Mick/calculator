@@ -49,6 +49,29 @@ for(let i = 0; i < allButtons.length; i++) {
 let chosenOperator = '';
 let firstOperand = '';
 let chosenNumber = '';
+let recentCalc = false;
+let calcResult = '';
+
+function allClear () {
+    chosenOperator = '';
+    firstOperand = '';
+    chosenNumber = '';
+    recentCalc = false;
+    calcResult = '';
+}
+
+//define function that calculates the input values
+function calculate() {
+    if(firstOperand != '' && chosenOperator != '' && chosenNumber != '') {
+        let numOperand = parseInt(firstOperand);
+        let numChosenNumber = parseInt(chosenNumber);
+        calcResult = operate(chosenOperator, numOperand, numChosenNumber);
+        resultDisplay.textContent = operate(chosenOperator, numOperand, numChosenNumber);
+        recentCalc = true;
+    }
+}
+let equalsSign = document.querySelector('#equals');
+equalsSign.addEventListener('click', calculate);
 
 
 //grab the operators and assign them values equivalent to their operation
@@ -57,12 +80,27 @@ let allTheOperators = document.getElementsByClassName('operator');
 for(let i = 0; i < allTheOperators.length; i++) {
     let operatorClicked = allTheOperators[i];
     operatorClicked.addEventListener('click', () => {
-        //if a number is chosen save the number as an
-        //operand, reset chosenNumber, and set the chosenOperator
-        if (chosenNumber != '') {
+        if (recentCalc == true) {
+            recentCalc = false;
+            firstOperand = calcResult;
+            chosenOperator = operatorClicked.textContent;
+            chosenNumber = '';
+        //if we have two numbers to calculate and an operator chosen
+        //then the operator button calculates and feeds up the result
+        //and updates the chosenOperator
+        } else if (chosenNumber != '' && firstOperand != '' && chosenOperator != '') {
+            calculate();
+            chosenOperator = operatorClicked.textContent;
+        //this else if is for the situation in which the firstOperand hasn't been chosen yet
+        } else if (chosenNumber != '') {
             firstOperand = chosenNumber;
+            chosenNumber = '';
             chosenOperator = operatorClicked.textContent;
         }
+        console.log(chosenNumber);
+        console.log(chosenOperator);
+        console.log(firstOperand);
+        console.log(recentCalc);
     });
 }
 
@@ -74,9 +112,11 @@ let resultDisplay = document.querySelector('#result-Display');
 for(let i = 0; i < allTheNumbers.length; i++) {
     let numberClicked = allTheNumbers[i];
     numberClicked.addEventListener('click', () => {
-        if (firstOperand != '' && chosenOperator != '' && firstOperand == chosenNumber) {
-            chosenNumber = '';
-            resultDisplay.textContent = ''; 
+        if (recentCalc == true) {
+            allClear();
+            resultDisplay.textContent = numberClicked.textContent;
+           // firstOperand = calcResult;
+        } else if (firstOperand != '' && chosenNumber == '') {
             resultDisplay.textContent = numberClicked.textContent;
         } else if (resultDisplay.textContent == '0') {
            resultDisplay.textContent = numberClicked.textContent;
@@ -84,22 +124,13 @@ for(let i = 0; i < allTheNumbers.length; i++) {
            resultDisplay.textContent += numberClicked.textContent;
         }
         chosenNumber += numberClicked.textContent;
+        console.log(chosenNumber);
+        console.log(chosenOperator);
+        console.log(firstOperand);
+        console.log(recentCalc);
    });
 }
 
 
 
-let equalsSign = document.querySelector('#equals');
 
-//setting the first operand to the first chosen value of chosenNumber
-//and reseting chosen number
-
-function calculate() {
-    if(firstOperand != '' && chosenOperator != '') {
-        
-    }
-}
-
-//function calculate() {
-//    if (chosenNumber != '' )
-//}
