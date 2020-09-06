@@ -1,3 +1,4 @@
+//definition of calculation functions
 function add(x, y) {
     let sum = x + y;
     return sum;
@@ -18,6 +19,8 @@ function multiply(x, y) {
     return product;
 }
 
+//definition of function that executes one of the above calculations
+//depending on the chosen operator
 function operate(operator, x, y) {
     let result;
     switch(operator) {
@@ -37,14 +40,6 @@ function operate(operator, x, y) {
     return result;
 }
 
-//adding a border to all the buttons
-let numberOperatorContainer = document.querySelector('#num-Operator-Container');
-let allButtons = numberOperatorContainer.children;
-for(let i = 0; i < allButtons.length; i++) {
-    allButtons[i].style.border = "0.5px solid black";
-}
-
-
 //initiate all variables needed by the calculator
 let chosenOperator = '';
 let firstOperand = '';
@@ -53,13 +48,21 @@ let operatorCalc = false;
 let equalsCalc = false;
 let calcResult = '';
 
-function allClear () {
+//function that clears the variables needed by the calculator
+function allClear() {
     chosenOperator = '';
     firstOperand = '';
     chosenNumber = '';
+    operatorCalc = false;
     equalsCalc = false;
     calcResult = '';
 }
+
+let allClearButton = document.querySelector('#AC');
+allClearButton.addEventListener('click', () => {
+    allClear();
+    resultDisplay.textContent = '0';
+    });
 
 //define function that calculates the input values
 function calculate() {
@@ -71,6 +74,8 @@ function calculate() {
         
     }
 }
+//set the equals sign to execute the calculate function and change
+//the equalsCalc boolean
 let equalsSign = document.querySelector('#equals');
 equalsSign.addEventListener('click', () => {
     calculate();
@@ -84,11 +89,13 @@ equalsSign.addEventListener('click', () => {
 
 
 //grab the operators and assign them values equivalent to their operation
-//add functionality to operator: when clicked, saves the chosenNumber value
 let allTheOperators = document.getElementsByClassName('operator');
 for(let i = 0; i < allTheOperators.length; i++) {
     let operatorClicked = allTheOperators[i];
     operatorClicked.addEventListener('click', () => {
+        //if a calculation has recently been performed by the equals sign
+        //then set the first operand to the result of the previous caclulation
+        //update the operator, and refresh the chosenNumber 
         if (equalsCalc == true) {
             equalsCalc = false;
             firstOperand = calcResult;
@@ -127,11 +134,9 @@ for(let i = 0; i < allTheNumbers.length; i++) {
             operatorCalc = false;
             firstOperand = calcResult;
             chosenNumber = '';
-        }
-        if (equalsCalc == true) {
+        } else if (equalsCalc == true) {
             allClear();
             resultDisplay.textContent = numberClicked.textContent;
-           // firstOperand = calcResult;
         } else if (firstOperand != '' && chosenNumber == '') {
             resultDisplay.textContent = numberClicked.textContent;
         } else if (resultDisplay.textContent == '0') {
@@ -147,6 +152,8 @@ for(let i = 0; i < allTheNumbers.length; i++) {
         console.log(operatorCalc);
    });
 }
+
+
 
 
 
