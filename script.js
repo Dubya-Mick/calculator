@@ -49,14 +49,15 @@ for(let i = 0; i < allButtons.length; i++) {
 let chosenOperator = '';
 let firstOperand = '';
 let chosenNumber = '';
-let recentCalc = false;
+let operatorCalc = false;
+let equalsCalc = false;
 let calcResult = '';
 
 function allClear () {
     chosenOperator = '';
     firstOperand = '';
     chosenNumber = '';
-    recentCalc = false;
+    equalsCalc = false;
     calcResult = '';
 }
 
@@ -67,11 +68,19 @@ function calculate() {
         let numChosenNumber = parseInt(chosenNumber);
         calcResult = operate(chosenOperator, numOperand, numChosenNumber);
         resultDisplay.textContent = operate(chosenOperator, numOperand, numChosenNumber);
-        recentCalc = true;
+        
     }
 }
 let equalsSign = document.querySelector('#equals');
-equalsSign.addEventListener('click', calculate);
+equalsSign.addEventListener('click', () => {
+    calculate();
+    equalsCalc = true;
+    console.log(chosenNumber);
+    console.log(chosenOperator);
+    console.log(firstOperand);
+    console.log(equalsCalc);
+    console.log(operatorCalc);
+});
 
 
 //grab the operators and assign them values equivalent to their operation
@@ -80,8 +89,8 @@ let allTheOperators = document.getElementsByClassName('operator');
 for(let i = 0; i < allTheOperators.length; i++) {
     let operatorClicked = allTheOperators[i];
     operatorClicked.addEventListener('click', () => {
-        if (recentCalc == true) {
-            recentCalc = false;
+        if (equalsCalc == true) {
+            equalsCalc = false;
             firstOperand = calcResult;
             chosenOperator = operatorClicked.textContent;
             chosenNumber = '';
@@ -90,6 +99,7 @@ for(let i = 0; i < allTheOperators.length; i++) {
         //and updates the chosenOperator
         } else if (chosenNumber != '' && firstOperand != '' && chosenOperator != '') {
             calculate();
+            operatorCalc = true;
             chosenOperator = operatorClicked.textContent;
         //this else if is for the situation in which the firstOperand hasn't been chosen yet
         } else if (chosenNumber != '') {
@@ -100,7 +110,8 @@ for(let i = 0; i < allTheOperators.length; i++) {
         console.log(chosenNumber);
         console.log(chosenOperator);
         console.log(firstOperand);
-        console.log(recentCalc);
+        console.log(equalsCalc);
+        console.log(operatorCalc);
     });
 }
 
@@ -112,7 +123,12 @@ let resultDisplay = document.querySelector('#result-Display');
 for(let i = 0; i < allTheNumbers.length; i++) {
     let numberClicked = allTheNumbers[i];
     numberClicked.addEventListener('click', () => {
-        if (recentCalc == true) {
+        if (operatorCalc == true) {
+            operatorCalc = false;
+            firstOperand = calcResult;
+            chosenNumber = '';
+        }
+        if (equalsCalc == true) {
             allClear();
             resultDisplay.textContent = numberClicked.textContent;
            // firstOperand = calcResult;
@@ -127,7 +143,8 @@ for(let i = 0; i < allTheNumbers.length; i++) {
         console.log(chosenNumber);
         console.log(chosenOperator);
         console.log(firstOperand);
-        console.log(recentCalc);
+        console.log(equalsCalc);
+        console.log(operatorCalc);
    });
 }
 
