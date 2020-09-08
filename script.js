@@ -95,18 +95,27 @@ function calculate() {
             return parseInt(chosenNumber);
         }
     }());
-    calcResult = operate(chosenOperator, numOperand, numChosenNumber);
-    resultDisplay.textContent = calcResult;
+    if (numChosenNumber == 0 && chosenOperator == "/") {
+        alert("Can't divide by zero!");
+        allClear();
+    } else {
+        calcResult = operate(chosenOperator, numOperand, numChosenNumber);
+        resultDisplay.textContent = calcResult;
+    }
+    
 }
 
 //set the equals sign to execute the calculate function and change
 //the equalsCalc boolean
 let equalsSign = document.querySelector('#equals');
 equalsSign.addEventListener('click', () => {
-    if (firstOperand != '' && chosenOperator != '' && chosenNumber != '' && chosenNumber != '0.') {
-        calculate();
-        equalsCalc = true;
-        callTheLogs();
+    if (firstOperand != '' 
+        && chosenOperator != '' 
+        && chosenNumber != '' 
+        && chosenNumber != '0.') {
+            calculate();
+            equalsCalc = true;
+            callTheLogs();
     }
 });
 
@@ -133,6 +142,33 @@ decimalButton.addEventListener('click', () => {
 });
 
 
+//define function of the +/- button
+let negativeButton = document.querySelector('#pos-Neg');
+negativeButton.addEventListener('click', () => {
+    if (equalsCalc == true) {
+        calcResult = (function () {
+            if (calcResult[0] != '-') {
+                return calcResult = '-' + calcResult;
+            } else {
+                return calcResult.replace('-', '');
+            }
+        }());
+        resultDisplay.textContent = calcResult;
+        chosenNumber = calcResult;
+        chosenOperator = '';
+        firstOperand = '';
+        equalsCalc = false;
+    } else if (resultDisplay.textContent != '0' && chosenNumber != '0' && chosenNumber != '') {
+        chosenNumber = (function () {
+            if (chosenNumber[0] != '-') {
+                return chosenNumber = '-' + chosenNumber;
+            } else {
+                return chosenNumber.replace('-', '');
+            }
+        }());
+        resultDisplay.textContent = chosenNumber;
+    }
+});
 
 //grab the operators and assign them values equivalent to their operation
 let allTheOperators = document.getElementsByClassName('operator');
@@ -150,7 +186,11 @@ for(let i = 0; i < allTheOperators.length; i++) {
         //if we have two numbers to calculate and an operator chosen
         //then the operator button calculates and feeds up the result
         //and updates the chosenOperator
-        } else if (chosenNumber != '' && firstOperand != '' && chosenOperator != '' && chosenNumber != '0.') {
+        } else if (chosenNumber != '' 
+                && firstOperand != '' 
+                && chosenOperator != '' 
+                && chosenNumber != '0.'
+                && chosenNumber != '-') {
             calculate();
             operatorCalc = true;
             chosenOperator = operatorClicked.textContent;
@@ -166,7 +206,6 @@ for(let i = 0; i < allTheOperators.length; i++) {
 
 //grab all numbers and give each one a function that changes the text content of
 //the calculator's display and stores that number value in chosenNumber for calculation
-
 let allTheNumbers = document.getElementsByClassName('number');
 let resultDisplay = document.querySelector('#result-Display');
 for(let i = 0; i < allTheNumbers.length; i++) {
