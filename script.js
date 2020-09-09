@@ -170,6 +170,25 @@ negativeButton.addEventListener('click', () => {
     }
 });
 
+//define function of the percentage button
+let percentButton = document.querySelector('#percent');
+percentButton.addEventListener('click', () => {
+    if (equalsCalc == true) {
+        equalsCalc = false;
+        chosenNumber = calcResult / 100;
+        resultDisplay.textContent = chosenNumber;
+        firstOperand = '';
+        chosenOperator = '';
+    } else if (chosenNumber != '0' && chosenNumber != '0.' && operatorCalc !== true) {
+        chosenNumber = chosenNumber / 100;
+        resultDisplay.textContent =  chosenNumber;
+    }
+})
+
+
+
+
+
 //grab the operators and assign them values equivalent to their operation
 let allTheOperators = document.getElementsByClassName('operator');
 for(let i = 0; i < allTheOperators.length; i++) {
