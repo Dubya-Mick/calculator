@@ -37,25 +37,31 @@ function operate(operator, x, y) {
             result = multiply(x, y);
             break;
     }
-    return result;
+    if (result.length > 24) {
+        return result.toExponential();
+    } else {
+        return result;
+    }
+    
 }
 
 //initiate all variables needed by the calculator
-let chosenOperator = '';
-let firstOperand = '';
-let chosenNumber = '';
-let operatorCalc = false;
-let equalsCalc = false;
-let calcResult = '';
+let chosenOperator = ''; //stores the operator chosen by the user
+let firstOperand = ''; //stores first number user chooses, gets value handed off from chosenNumber or calcResult
+let chosenNumber = ''; //initially stores first number user chooses, then hands it off to firstOperand, takes second number for calculation
+let operatorCalc = false; //boolean showing if calculation has just occured with operator button
+let equalsCalc = false; //boolean showing if calculation has just occured with equals button
+let calcResult = ''; //holds result of calculation
 
-//function that clears the variables needed by the calculator
+//function that clears the variables needed by the calculator, resets fontSize of display
 function allClear() {
     chosenOperator = '';
     firstOperand = '';
     chosenNumber = '';
-    operatorCalc = false;
-    equalsCalc = false;
+    operatorCalc = false; 
+    equalsCalc = false; 
     calcResult = '';
+    resultDisplay.style.fontSize = '2.5em';
 }
 
 //function that calls the logs of the variables needed
@@ -68,6 +74,7 @@ function callTheLogs() {
     console.log(calcResult); 
 }
 
+//adding functionality to the AC button
 let allClearButton = document.querySelector('#AC');
 allClearButton.addEventListener('click', () => {
     allClear();
@@ -79,7 +86,7 @@ allClearButton.addEventListener('click', () => {
 //if the numbers are floats, they get parsed as floats
 //if they're integers they get parsed as integers
 //surrounding the function with () and adding the () 
-//at the end invokeas the function immediately
+//at the end invokes the function immediately
 function calculate() {
     let numOperand = (function() {
         if (/[.]/.test(firstOperand)) {
@@ -102,7 +109,9 @@ function calculate() {
         calcResult = operate(chosenOperator, numOperand, numChosenNumber);
         resultDisplay.textContent = calcResult;
     }
-    
+    if (resultDisplay.textContent.length > 12 && resultDisplay.textContent.length < 24) {
+        resultDisplay.style.fontSize = '1.3em'
+    } 
 }
 
 //set the equals sign to execute the calculate function and change
@@ -186,9 +195,6 @@ percentButton.addEventListener('click', () => {
 })
 
 
-
-
-
 //grab the operators and assign them values equivalent to their operation
 let allTheOperators = document.getElementsByClassName('operator');
 for(let i = 0; i < allTheOperators.length; i++) {
@@ -230,6 +236,9 @@ let resultDisplay = document.querySelector('#result-Display');
 for(let i = 0; i < allTheNumbers.length; i++) {
     let numberClicked = allTheNumbers[i];
     numberClicked.addEventListener('click', () => {
+        //if recent calculation with operator button, set the result
+        //to the new firstOperand and refresh chosenNumber allowing
+        //for chaining of calculation
         if (operatorCalc == true) {
             operatorCalc = false;
             firstOperand = calcResult;
@@ -242,16 +251,25 @@ for(let i = 0; i < allTheNumbers.length; i++) {
             resultDisplay.textContent = numberClicked.textContent;
         } else if (resultDisplay.textContent == '0') {
            resultDisplay.textContent = numberClicked.textContent;
-        } else {
+        } else if (chosenNumber.length < 24) {
            resultDisplay.textContent += numberClicked.textContent;
         }
-        chosenNumber += numberClicked.textContent;
+        if (chosenNumber.length < 24) {
+            chosenNumber += numberClicked.textContent;
+        }
         callTheLogs();
    });
 }
 
-
-
+//resize display text if it gets too long
+let allTheNumsArr = [...allTheNumbers];
+allTheNumsArr.forEach(number => {
+    number.addEventListener('click', () => {
+        if (resultDisplay.textContent.length > 12) {
+            resultDisplay.style.fontSize = '1.3em';
+        }
+    })
+})
 
 
 
